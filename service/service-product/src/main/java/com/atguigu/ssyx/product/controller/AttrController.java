@@ -1,6 +1,7 @@
 package com.atguigu.ssyx.product.controller;
 
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023-06-11
  */
 @RestController
-@RequestMapping("/product/attr")
+@RequestMapping("/admin/product/attr")
+@CrossOrigin
 public class AttrController {
 
 }
