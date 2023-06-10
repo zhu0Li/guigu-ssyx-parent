@@ -1,7 +1,11 @@
 package com.atguigu.ssyx.acl.service.impl;
 
+import com.atguigu.ssyx.acl.mapper.AdminRoleMapper;
 import com.atguigu.ssyx.acl.mapper.RoleMapper;
+import com.atguigu.ssyx.acl.service.AdminRoleService;
 import com.atguigu.ssyx.acl.service.RoleService;
+import com.atguigu.ssyx.model.acl.Admin;
+import com.atguigu.ssyx.model.acl.AdminRole;
 import com.atguigu.ssyx.model.acl.Role;
 import com.atguigu.ssyx.vo.acl.RoleQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -14,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.*;
+
 /**
  * @author ：zhuo
  * @description：角色管理实现类
@@ -23,6 +29,11 @@ import org.springframework.util.StringUtils;
 @Service
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
+    @Autowired
+    private AdminRoleMapper adminRoleMapper;
+
+    @Autowired
+    private AdminRoleService adminRoleService;
 
     /**
      * !角色列表，条件分页查询
@@ -46,5 +57,44 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
         //*返回分页对象
         return rolePage;
+    }
+
+    /**
+     * !获取所有角色，和根据用户id查询用户分配角色列表
+     * @param adminId 用户id
+     * @return 所有角色，和根据用户id的用户分配角色列表
+     */
+    @Override
+    public Map<String, Object> getRoleByAdminId(Long adminId) {
+        //*1 查询所有的角色
+        List<Role> allRolesList = baseMapper.selectList(null);
+
+        //*2 根据用户id查询用户分配角色列表
+        List<Role> assignRoles = adminRoleMapper.selectByAdminId(adminId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("allRolesList", allRolesList);
+        result.put("assignRoles", assignRoles);
+        return result;
+    }
+
+    /**
+     * !为用户分配角色
+     * @param adminId 用户id
+     * @param roleId 角色们的id
+     */
+    @Override
+    public void saveAdminRole(Long adminId, Long[] roleId) {
+        adminRoleService.remove(new LambdaQueryWrapper<AdminRole>().eq(AdminRole::getAdminId, adminId));
+
+        List<AdminRole> list = new ArrayList<>();
+        for (Long id: roleId){
+            AdminRole adminRole = new AdminRole();
+            adminRole.setAdminId(adminId);
+            adminRole.setRoleId(id);
+            list.add(adminRole);
+        }
+
+        adminRoleService.saveBatch(list);
     }
 }

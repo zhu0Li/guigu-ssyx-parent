@@ -1,6 +1,7 @@
 package com.atguigu.ssyx.acl.controller;
 
 import com.atguigu.ssyx.acl.service.AdminService;
+import com.atguigu.ssyx.acl.service.RoleService;
 import com.atguigu.ssyx.common.result.Result;
 import com.atguigu.ssyx.model.acl.Admin;
 import com.atguigu.ssyx.vo.acl.AdminQueryVo;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：zhuo
@@ -26,6 +28,9 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private RoleService roleService;
 
     //! 用户列表
     @ApiOperation("用户列表")
@@ -94,5 +99,21 @@ public class AdminController {
         }
     }
 
-    //!
+    //! 获取所有角色，以及根据用户id查询其所有角色
+    @ApiOperation("获取用户所有角色")
+    @GetMapping("toAssign/{adminId}")
+    public Result toAssign(@PathVariable Long adminId){
+        //*返回的map集合中包含两部分数据：所有角色 和 为用户分配的角色
+        Map<String, Object> map = roleService.getRoleByAdminId(adminId);
+        return Result.ok(map);
+    }
+
+    //! 为用户分配角色
+    @ApiOperation("为用户分配角色")
+    @PostMapping("doAssign")
+    public Result doAssign(@RequestParam Long adminId,
+                           @RequestParam Long[] roleId){
+        roleService.saveAdminRole(adminId,roleId);
+        return Result.ok(null);
+    }
 }
