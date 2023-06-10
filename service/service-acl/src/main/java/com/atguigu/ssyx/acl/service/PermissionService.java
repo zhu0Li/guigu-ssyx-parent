@@ -14,4 +14,8 @@ public interface PermissionService extends IService<Permission> {
     List<Permission> queryAllPermission();
 
     boolean deleteById(Long id);
+
+    List<Permission> getRoleByAdminId(Long roleId);
+
+    void saveAdminRole(Long roleId, Long[] permissionId);
 }

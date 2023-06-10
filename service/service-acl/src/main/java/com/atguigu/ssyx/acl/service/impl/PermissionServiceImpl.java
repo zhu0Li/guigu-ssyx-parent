@@ -1,15 +1,19 @@
 package com.atguigu.ssyx.acl.service.impl;
 
 import com.atguigu.ssyx.acl.mapper.PermissionMapper;
+import com.atguigu.ssyx.acl.mapper.RolePermissionMapper;
 import com.atguigu.ssyx.acl.service.PermissionService;
 import com.atguigu.ssyx.acl.utils.PermissionHelper;
 import com.atguigu.ssyx.model.acl.Permission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：zhuo
@@ -18,6 +22,12 @@ import java.util.List;
  */
 @Service
 public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionService {
+
+    @Autowired
+    private RolePermissionMapper rolePermissionMapper;
+
+    @Autowired
+    PermissionServiceImpl permissionService;
 
     @Override
     public List<Permission> queryAllPermission() {
@@ -41,6 +51,25 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
         int i = baseMapper.deleteBatchIds(idList);
         return i>0;
+    }
+
+    @Override
+    public List<Permission> getRoleByAdminId(Long roleId) {
+        //*1 查询所有的权限
+        List<Permission> allPermissions = permissionService.queryAllPermission();
+
+        //*2 根据用户id查询用户分配角色列表
+//        List<Permission> assignPermissions = rolePermissionMapper.selectByAdminId(roleId);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("allPermissions", allPermissions);
+//        result.put("assignPermissions", assignPermissions);
+        return allPermissions;
+    }
+
+    @Override
+    public void saveAdminRole(Long roleId, Long[] permissionId) {
+
     }
 
 
