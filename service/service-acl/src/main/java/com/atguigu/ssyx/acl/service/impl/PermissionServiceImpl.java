@@ -5,6 +5,7 @@ import com.atguigu.ssyx.acl.mapper.RolePermissionMapper;
 import com.atguigu.ssyx.acl.service.PermissionService;
 import com.atguigu.ssyx.acl.utils.PermissionHelper;
 import com.atguigu.ssyx.model.acl.Permission;
+import com.atguigu.ssyx.model.acl.RolePermission;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ：zhuo
@@ -55,16 +57,24 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     @Override
     public List<Permission> getRoleByAdminId(Long roleId) {
+//    public Map<String, Object> getRoleByAdminId(Long roleId) {
         //*1 查询所有的权限
         List<Permission> allPermissions = permissionService.queryAllPermission();
 
         //*2 根据用户id查询用户分配角色列表
 //        List<Permission> assignPermissions = rolePermissionMapper.selectByAdminId(roleId);
-
+        List<Long> permissionIds = getCheckedIds(roleId);
         Map<String, Object> result = new HashMap<>();
         result.put("allPermissions", allPermissions);
-//        result.put("assignPermissions", assignPermissions);
+        result.put("checkedIds", permissionIds);
         return allPermissions;
+    }
+
+    public List<Long> getCheckedIds(Long roleId){
+        List<RolePermission> rolePermissions = rolePermissionMapper.selectList(new LambdaQueryWrapper<RolePermission>()
+                .eq(RolePermission::getRoleId, roleId).eq(RolePermission::getIsDeleted,0));
+        List<Long> list = rolePermissions.stream().map(RolePermission::getPermissionId).collect(Collectors.toList());
+        return list;
     }
 
     @Override

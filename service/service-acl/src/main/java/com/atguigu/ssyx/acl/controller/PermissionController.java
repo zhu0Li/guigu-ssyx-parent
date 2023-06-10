@@ -77,6 +77,7 @@ public class PermissionController {
     public Result toAssign(@PathVariable Long roleId){
         //*返回的map集合中包含两部分数据：所有角色 和 为用户分配的角色
         List<Permission> map = permissionService.getRoleByAdminId(roleId);
+//        Map<String,Object> map = permissionService.getRoleByAdminId(roleId);
         return Result.ok(map);
     }
 

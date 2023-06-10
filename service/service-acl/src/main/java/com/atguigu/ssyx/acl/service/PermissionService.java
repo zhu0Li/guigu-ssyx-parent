@@ -4,6 +4,7 @@ import com.atguigu.ssyx.model.acl.Permission;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ：zhuo
@@ -16,6 +17,8 @@ public interface PermissionService extends IService<Permission> {
     boolean deleteById(Long id);
 
     List<Permission> getRoleByAdminId(Long roleId);
+//    Map<String, Object> getRoleByAdminId(Long roleId);
+
 
     void saveAdminRole(Long roleId, Long[] permissionId);
 }

@@ -24,6 +24,6 @@ public class GlobalExceptionHandler {
     //自定义异常处理
     @ExceptionHandler(SsyxException.class)
     public Result error(SsyxException e){
-        return Result.fail(null);
+        return Result.build(null, e.getCode(), e.getMessage());
     }
 }
