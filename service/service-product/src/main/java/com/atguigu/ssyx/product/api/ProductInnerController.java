@@ -18,17 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/product")
-public class ProductInnnerController {
+public class ProductInnerController {
 
     @Autowired
-    CategoryService categoryService;
+    private CategoryService categoryService;
 
     @Autowired
     SkuInfoService skuInfoService;
 
     @ApiOperation(value = "根据分类id获取分类信息")
     @GetMapping("inner/getCategory/{categoryId}")
-    public Category getCategory(@PathVariable Long categoryId) {
+    public Category getCategory(@PathVariable("categoryId") Long categoryId) {
         return categoryService.getById(categoryId);
     }
 

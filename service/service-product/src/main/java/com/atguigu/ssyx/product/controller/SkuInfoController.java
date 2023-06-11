@@ -71,14 +71,14 @@ public class SkuInfoController {
     @ApiOperation(value = "删除")
     @DeleteMapping("remove/{id}")
     public Result remove(@PathVariable Long id) {
-        skuInfoService.removeById(id);
+        skuInfoService.deleteById(id);
         return Result.ok(null);
     }
 
     @ApiOperation(value = "根据id列表删除")
     @DeleteMapping("batchRemove")
     public Result batchRemove(@RequestBody List<Long> idList) {
-        skuInfoService.removeByIds(idList);
+        skuInfoService.deleteByIds(idList);
         return Result.ok(null);
     }
 
