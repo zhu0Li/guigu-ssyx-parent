@@ -36,4 +36,8 @@ public interface SkuInfoService extends IService<SkuInfo> {
     void deleteById(Long id);
 
     void deleteByIds(List<Long> idList);
+
+    List<SkuInfo> findSkuInfoList(List<Long> skuIdList);
+
+    List<SkuInfo> findSkuInfoListByKeyword(String keyword);
 }

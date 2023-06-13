@@ -6,10 +6,9 @@ import com.atguigu.ssyx.product.service.CategoryService;
 import com.atguigu.ssyx.product.service.SkuInfoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author ：zhuo
@@ -36,5 +35,17 @@ public class ProductInnerController {
     @GetMapping("inner/getSkuInfo/{skuId}")
     public SkuInfo getSkuInfo(@PathVariable("skuId") Long skuId) {
         return skuInfoService.getById(skuId);
+    }
+
+    @ApiOperation(value = "根据skuId列表查询sku列表")
+    @PostMapping("inner/findSkuInfoList")
+    public List<SkuInfo> findSkuInfoList(@RequestBody List<Long> skuIdList){
+        return skuInfoService.findSkuInfoList(skuIdList);
+    }
+
+    @ApiOperation(value = "根据关键字查询sku列表")
+    @PostMapping("inner/findSkuInfoListByKeyword/{keyword}")
+    public List<SkuInfo> findSkuInfoListByKeyword(@PathVariable String keyword){
+        return skuInfoService.findSkuInfoListByKeyword(keyword);
     }
 }

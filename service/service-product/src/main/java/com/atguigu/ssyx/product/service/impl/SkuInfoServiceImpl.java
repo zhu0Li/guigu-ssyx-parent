@@ -248,4 +248,21 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo> impl
                     id);
         });
     }
+
+    @Override
+    public List<SkuInfo> findSkuInfoList(List<Long> skuIdList) {
+        if (skuIdList.isEmpty()) {
+            return null;
+        }else {
+            List<SkuInfo> skuInfoList = this.listByIds(skuIdList);
+            return skuInfoList;
+        }
+    }
+
+    @Override
+    public List<SkuInfo> findSkuInfoListByKeyword(String keyword) {
+        List<SkuInfo> skuInfoList = baseMapper.selectList(
+                new LambdaQueryWrapper<SkuInfo>().like(SkuInfo::getSkuName, keyword));
+        return skuInfoList;
+    }
 }
