@@ -31,4 +31,8 @@ public interface ProductFeignClient {
     @ApiOperation(value = "根据关键字查询sku列表")
     @PostMapping("/api/product/inner/findSkuInfoListByKeyword/{keyword}")
     public List<SkuInfo> findSkuInfoListByKeyword(@PathVariable String keyword);
+
+    @ApiOperation(value = "根据分类idList获取分类List")
+    @PostMapping("/api/product/inner/findCategoryList/{idList}")
+    public List<Category> findCategoryList(@PathVariable List<Long> idList);
 }
